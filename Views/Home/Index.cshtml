@@ -1,0 +1,89 @@
+﻿@model LookToLog.Models.LogViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+<div class="row">
+    <div class="col-lg-12" style="text-align: center">
+        <h1 class="page-header" style="text-align: center">Look To Log</h1>
+        @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { id = "logForm" }))
+        {
+            @Html.AntiForgeryToken()
+
+            if (string.IsNullOrEmpty(Model.SelectedLogPath))
+            {
+                @Html.DropDownListFor(m => m.SelectedLogPath, new SelectList(ViewBag.DrowpdownList, "Value", "Text"), "Seçiniz", new
+                {
+                    onchange = @"LogFileSelect();"
+                })
+            }
+            else
+            {
+                @Html.DropDownListFor(m => m.SelectedLogPath, new SelectList(ViewBag.DrowpdownList, "Value", "Text"), new
+                {
+                    onchange = @"LogFileSelect();"
+                })
+            }
+        }
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div style="margin-left: auto; margin-right: auto; width: 70%;">
+        @if (!string.IsNullOrEmpty(Model.SelectedLogPath))
+        {
+            <br />
+            <br />
+            if(!string.IsNullOrEmpty(ViewBag.Exception))
+            {
+                @Html.Raw(ViewBag.Exception)
+            }
+            else
+            {
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                            <thead>
+                                <tr>
+                                    <th>Satır</th>
+                                    <th>İçerik</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @foreach(var item in Model.LogList)
+                            {
+                                <tr>
+                                    <td>@item.Row</td>
+                                    <td>@item.Content</td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+        }
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script src="/js/jquery.dataTables.min.js"></script>
+    <script src="/js/dataTables.bootstrap.min.js"></script>
+    <script src="/js/dataTables.responsive.js"></script>
+    <script>
+    $(document).ready(function() {
+        $('#dataTables-example').DataTable({
+            responsive: true
+        });
+    });
+
+    function LogFileSelect()
+        {
+            if($("#SelectedLogPath").val().length > 0)
+            {
+                $("#logForm").submit();
+            }
+        }
+    </script>
+}
