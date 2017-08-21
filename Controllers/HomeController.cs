@@ -43,13 +43,13 @@ namespace LookToLog.Controllers
 
             model.LogList = new List<Log>();
 
-            var path = Path.GetDirectoryName(model.SelectedLogPath) + "/";
-            var copyFile = path + Guid.NewGuid().ToString() + ".txt";
-
-            System.IO.File.Copy(model.SelectedLogPath, copyFile);
-
             try
             {
+                var path = Path.GetDirectoryName(model.SelectedLogPath) + "/";
+                var copyFile = path + Guid.NewGuid().ToString() + ".txt";
+
+                System.IO.File.Copy(model.SelectedLogPath, copyFile);
+
                 if (IsFileClosed(copyFile, true))
                 {
                     using (var sr = new StreamReader(new System.IO.FileStream(copyFile,
@@ -72,13 +72,13 @@ namespace LookToLog.Controllers
                         }
                     }
                 }
+
+                System.IO.File.Delete(copyFile);
             }
             catch (Exception ex)
             {
                 ViewBag.Error = ex.Message;
             }
-
-            System.IO.File.Delete(copyFile);
 
             return View(model);
         }
