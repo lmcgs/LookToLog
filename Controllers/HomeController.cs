@@ -2,12 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using LookToLog.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Options;
 using System.IO;
 
 namespace LookToLog.Controllers
@@ -52,9 +49,9 @@ namespace LookToLog.Controllers
 
                 if (IsFileClosed(copyFile, true))
                 {
-                    using (var sr = new StreamReader(new System.IO.FileStream(copyFile,
-                                                        System.IO.FileMode.Open,
-                                                        System.IO.FileAccess.Read)))
+                    using (var sr = new StreamReader(new FileStream(copyFile,
+                                                        FileMode.Open,
+                                                        FileAccess.Read)))
                     {
 
                         var line = sr.ReadLine();
